@@ -309,7 +309,7 @@ main {
 /* The hero image - MADE DARKER OVERLAY */
 .hero-image {
     /* Increased the 0.5 to 0.7 to make the image itself darker */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../images/hero-banner.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/hero-banner.jpg");
     height: 350px;
     background-position: center;
     background-repeat: no-repeat;
