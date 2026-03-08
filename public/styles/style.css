@@ -143,65 +143,36 @@ main {
 
 
 /* header */
-
+/* header - MADE DARKER */
 .header {
-
   overflow: hidden;
-
-  background-color: white;
-
+  background-color: #1a1a1a; /* Dark background to match the car vibe */
   padding: 20px 10px;
-
 }
-
-
 
 .header a {
-
   float: left;
-
-  color: black;
-
+  color: #ffffff; /* White text so it's readable on dark */
   text-align: center;
-
   padding: 12px;
-
   text-decoration: none;
-
   font-size: 18px; 
-
   line-height: 25px;
-
   border-radius: 4px;
-
 }
 
-
-
-.header a.logo {
-
-  font-size: 25px;
-
-  font-weight: bold;
-
-  padding: 0;
-
-}
-
-.header a.logo img{
-
+.header a.logo img {
   height: 50px;
-
 }
 
-
-
+/* Keeps your blue box for the active link */
 .header a.active {
-
   background-color: #334B62;
-
   color: white;
+}
 
+.header-right {
+  float: right;
 }
 
 
@@ -335,55 +306,26 @@ main {
 
 
 /* The hero image */
-
+/* The hero image - MADE DARKER OVERLAY */
 .hero-image {
-
-
-
-    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/hero-banner.jpg");
-
-
-
-    /* Set a specific height */
-
+    /* Increased the 0.5 to 0.7 to make the image itself darker */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../images/hero-banner.jpg");
     height: 350px;
-
-
-
-    /* Position and center the image to scale nicely on all screens */
-
     background-position: center;
-
     background-repeat: no-repeat;
-
     background-size: cover;
-
     position: relative;
-
     justify-content: center !important;
-
 }
 
-
-
-/* Place text in the middle of the image */
-
+/* Keeping your original positioning exactly as is */
 .hero-text {
-
     position: absolute;
-
     top: 50%;
-
     left: 37%;
-
     transform: translate(-50%, -50%);
-
     color: white;
-
     text-align: center !important;
-
 }
 
 
