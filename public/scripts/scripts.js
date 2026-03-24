@@ -1,45 +1,54 @@
-// scripts.js
-function displayAuthForm(){ const el=document.getElementById("loginform"); if(el) el.style.visibility="visible"; }
-function hideAuthForm(){ const el=document.getElementById("loginform"); if(el) el.style.visibility="hidden"; }
-
-function setKnownIdentity({ email, firstName='', lastName='' } = {}) {
-  if (!email) return;
-
-  // Optional helper signal
-  SalesforceInteractions.sendEvent({
-    interaction:{ name:'emailCapture' },
-    user:{ attributes:{ eventType:'contactPointEmail', email:String(email) } }
-  });
-
-  // Known identity; DC will merge by email
-  SalesforceInteractions.sendEvent({
-    user:{ attributes:{
-      eventType:'identity',
-      isAnonymous:"0",
-      email:String(email),
-      firstName:String(firstName||''),
-      lastName:String(lastName||'')
-    } }
-  });
+// Function to show the login form
+function displayAuthForm() {
+    document.getElementById("loginform").style.visibility = "visible";
 }
 
-function submitAuthForm(){
-  const f=document.getElementById("authenticationForm"); if(!f) return;
-  setKnownIdentity({
-    email: f.elements["email"]?.value || '',
-    firstName: f.elements["firstname"]?.value || '',
-    lastName: f.elements["lastname"]?.value || ''
-  });
-  hideAuthForm();
+// Function to hide the login form
+function hideAuthForm() {
+    document.getElementById("loginform").style.visibility = "hidden";
 }
 
-function addToCart(productId){
-  SalesforceInteractions.sendEvent({
-    interaction:{ name:"Add To Cart",
-      lineItem:{ catalogObjectType:"Product",
-        catalogObjectId:(typeof getProductId==='function')?getProductId():String(productId||''),
-        quantity:1, price:148.00, currency:"USD"
-      }
+// Function to handle frontend UI and send data to Data Cloud
+function submitAuthForm() {
+    const emailInput = document.getElementById("email").value;
+    const firstNameInput = document.getElementById("firstname").value;
+    const lastNameInput = document.getElementById("lastname").value;
+
+    if (emailInput) {
+        // 1. Do the purely frontend UI work first
+        hideAuthForm();
+        
+        // Find the login button in the header and update it
+        const loginBtn = document.querySelector(".header-right .login");
+        if (loginBtn) {
+            // Change the text to "Hi, [Name]" (or just "Hi!" if they left the name blank)
+            loginBtn.innerText = firstNameInput ? "Hi, " + firstNameInput : "Hi!";
+            // Remove the onclick event so clicking it doesn't reopen the form
+            loginBtn.removeAttribute("onclick");
+        }
+
+        // 2. Send the data to the Salesforce SDK
+        if (window.SalesforceInteractions) {
+            SalesforceInteractions.sendEvent({
+                interaction: {
+                    name: "User Login" 
+                },
+                user: {
+                    identities: {
+                        emailAddress: emailInput // Matches your "Exact Normalized Email" rule!
+                    },
+                    attributes: {
+                        firstName: firstNameInput,
+                        lastName: lastNameInput
+                    }
+                }
+            }).then(() => {
+                console.log("Success! Identity sent to Salesforce:", emailInput);
+            });
+        } else {
+            console.warn("Salesforce Interactions SDK not loaded yet.");
+        }
+    } else {
+        console.warn("No email provided.");
     }
-  });
 }
