@@ -1,3 +1,21 @@
+// --- NEW: Check for existing login state as soon as the page loads ---
+document.addEventListener("DOMContentLoaded", function() {
+    const storedName = sessionStorage.getItem("userFirstName");
+    // If we have a stored name, update the button immediately
+    if (storedName !== null) {
+        updateLoginButtonUI(storedName);
+    }
+});
+
+// Helper function to handle the UI change so we don't repeat code
+function updateLoginButtonUI(firstName) {
+    const loginBtn = document.querySelector(".header-right .login");
+    if (loginBtn) {
+        loginBtn.innerText = firstName ? "Hi, " + firstName : "Hi!";
+        loginBtn.removeAttribute("onclick"); // Prevent reopening the form
+    }
+}
+
 // Function to show the login form
 function displayAuthForm() {
     document.getElementById("loginform").style.visibility = "visible";
@@ -15,17 +33,12 @@ function submitAuthForm() {
     const lastNameInput = document.getElementById("lastname").value;
 
     if (emailInput) {
+        // --- NEW: Save the user's name to browser storage for this session ---
+        sessionStorage.setItem("userFirstName", firstNameInput);
+
         // 1. Do the purely frontend UI work first
         hideAuthForm();
-        
-        // Find the login button in the header and update it
-        const loginBtn = document.querySelector(".header-right .login");
-        if (loginBtn) {
-            // Change the text to "Hi, [Name]" (or just "Hi!" if they left the name blank)
-            loginBtn.innerText = firstNameInput ? "Hi, " + firstNameInput : "Hi!";
-            // Remove the onclick event so clicking it doesn't reopen the form
-            loginBtn.removeAttribute("onclick");
-        }
+        updateLoginButtonUI(firstNameInput);
 
         // 2. Send the data to the Salesforce SDK
         if (window.SalesforceInteractions) {
